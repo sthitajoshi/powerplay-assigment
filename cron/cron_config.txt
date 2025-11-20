@@ -1,0 +1,7 @@
+cron_config
+cron.txt
+cron-root.txt
+
+
+
+*/5 * * * * /usr/local/bin/system_report.sh

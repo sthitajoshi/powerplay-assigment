@@ -1,5 +1,3 @@
-
-
 ***
 
 # DevOps Intern Assignment
@@ -42,8 +40,9 @@ All tasks were performed on an Ubuntu 22.04 LTS **t2.micro Free-Tier EC2** insta
   ```
 
 **Deliverables:**
+**Screenshot:**
 
-- Screenshot: hostname, `/etc/passwd`, output of `sudo whoami` as devops_intern(screenshots/part1.jpg)
+![Part 1 – Hostname, User, Sudo Verification](screenshots/part1_hii.jpg)
 
 ***
 
@@ -79,8 +78,9 @@ All tasks were performed on an Ubuntu 22.04 LTS **t2.micro Free-Tier EC2** insta
   ```
 
 **Deliverable:**
+**Screenshot:**  
+![Part 2 – Web Page Output](screenshots/part2.jpg)
 
-- Screenshot of web page loaded at `http://13.232.57.52` | (screenshots/part2.jpg)
 
 ***
 
@@ -108,8 +108,9 @@ sudo crontab -e
 
 **Deliverables:**
 
-- Cron file contents
-- Screenshot: log entries in `/var/log/system_report.log` | (screenshots/part3.jpg)
+**Screenshots:**  
+![Part 3 – Cron and Logs](screenshots/part3.jpg)
+
 
 ***
 
@@ -138,8 +139,10 @@ sudo crontab -e
 
 **Deliverables:**
 
-- AWS CLI commands used
-- Screenshot: CloudWatch logs with uploaded entries | (screenshots/part4.1.jpg)(screenshots/part4.2.jpg)
+**Screenshots:**  
+![Part 4 – CloudWatch Log Group](screenshots/part4.1.jpg)
+![Part 4 – CloudWatch Log Stream](screenshots/part4.2.jpg)
+
 
 ***
 
@@ -166,10 +169,33 @@ sudo crontab -e
     ├── part2_webpage.png
     ├── part3_cron_and_logs.png
     ├── part4_cloudwatch.png
+    |-- Bonus
+    |-- Bonus if more then 80% goes 
 ```
+
+### Bonus – systemd timer instead of cron
+
+The periodic execution of `system_report.sh` was moved from cron to systemd:
+
+- `/etc/systemd/system/system-report.service` runs the script and appends output to `/var/log/system_report.log`.
+- `/etc/systemd/system/system-report.timer` triggers the service every 5 minutes (`OnUnitActiveSec=5min`).
+
+This improves manageability and introspection via `systemctl` and `journalctl`.
+
+### Bonus – Disk usage email alert
+
+The script `/usr/local/bin/system_report.sh` was extended to calculate numeric disk usage from `df -h /` and trigger an alert when usage > 80%. The alert is logged to `/var/log/system_report.log`, and the script is prepared to send notifications via AWS SES or the local `mail` command (once configured).
+
+**Screenshots:**  
+![Part 4 – CloudWatch Log Group](screenshots/bonus1.jpg)
+![Part 4 – CloudWatch Log Stream](screenshots/bonus2.jpg)
+
 
 ***
 
+
+
+***
 ## 🧪 How to Reproduce the Environment
 
 1. **Launch** a Free-Tier Ubuntu EC2 instance.
@@ -189,5 +215,4 @@ sudo crontab -e
    aws configure
    ```
 8. **Create** CloudWatch log group and stream, **upload logs**.
-
 ***
